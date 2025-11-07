@@ -1,0 +1,52 @@
+FEATURE REQUEST: Add appointment booking functionality for verified experts
+
+CURRENT FLOW:
+- User signs up → completes profile
+- If user checks "I'm a healthcare/elder professional" → expert form opens
+- Expert fills form and waits for admin approval
+
+NEW REQUIREMENT:
+
+Add a new checkbox in the expert form:
+☐ Allow appointment booking after verification
+
+FUNCTIONALITY:
+
+1. Expert Form Addition
+   - Add checkbox: "Allow appointment booking after verification"
+   - This checkbox appears only in the expert signup form
+   - Expert can check this during profile completion
+
+2. Conditional Display Logic
+   - If expert checks the box AND admin approves expert
+   - Show "Book Appointment" button on expert's profile page
+   - If not checked or not approved → hide booking button
+
+3. Calendly Integration for Scheduling
+   - When "Book Appointment" button is clicked
+   - Open Calendly scheduling interface
+   - Expert needs to set up their Calendly account separately
+   - Store expert's Calendly link in database
+
+4. Expert Availability Setup
+   - Expert provides their Calendly link during form completion
+   - Add field: "Calendly Link" (text input)
+   - This link will be used to embed Calendly widget
+
+5. Database Changes
+   - First check if these columns already exist in the database
+   - If not exists, add column: allow_booking (boolean, default false)
+   - If not exists, add column: calendly_link (text, nullable)
+   - Both fields saved when expert completes form
+
+6. Book Appointment Flow
+   User clicks "Book Appointment" → Opens Calendly embed → User selects date/time → Booking confirmed through Calendly
+
+Please implement:
+- Checkbox in expert form for appointment booking
+- Calendly link input field
+- Check database for existing columns before adding new ones
+- Conditional "Book Appointment" button display
+- Calendly widget integration on click
+
+Note: Experts will manage their availability (month, dates, times, hours) directly in their Calendly account, not in our application.

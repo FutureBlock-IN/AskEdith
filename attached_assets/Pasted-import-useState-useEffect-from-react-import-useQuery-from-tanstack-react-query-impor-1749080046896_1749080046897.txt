@@ -1,0 +1,628 @@
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import {
+  Heart,
+  Shield,
+  Users,
+  MessageSquare,
+  Star,
+  CheckCircle,
+  ArrowRight,
+  Clock,
+  UserCheck,
+  Award,
+  Plus,
+  Search,
+} from "lucide-react";
+import Header from "@/components/Header";
+import SignupModal from "@/components/SignupModal";
+import DefaultProfilePicture from "@/components/DefaultProfilePicture";
+import askEdithHeroImage from "@assets/AskEdith_CareCommunity.png";
+
+// Import category images
+import governmentImg from "@assets/Government.jpg";
+import careAtHomeImg from "@assets/care_at_home.jpg";
+import healthCareImg from "@assets/health_care.jpg";
+import seniorLivingImg from "@assets/new_senior_living_image.png";
+import professionalsImg from "@assets/professionals.jpg";
+import payingForCareImg from "@assets/paying_for_care.jpg";
+
+// Map category slugs to images
+const categoryImages: Record<string, string> = {
+  'government-resources': governmentImg,
+  'home-care': careAtHomeImg,
+  'hospital-rehab': healthCareImg,
+  'senior-living': seniorLivingImg,
+  'professional-advice': professionalsImg,
+  'paying-for-care': payingForCareImg,
+};
+
+export default function Landing() {
+  const [signupModalOpen, setSignupModalOpen] = useState(false);
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+
+  // Typewriter phrases for search bar
+  const searchPhrases = [
+    "Does Medicare or Medicaid pay for Senior Living?",
+    "What is an Aging Life Care Professional?",
+    "Tell me about contracting with Home Care companies . . . ",
+    "What is an Area Agency on Aging?",
+    "Help me understand all the types of \"Senior Living\" . . . ",
+    "How Medicare pays for rehab is really confusing. Help me . . . ",
+    "What professionals specialize in helping families care . . . ",
+    "How do we pay for home care or senior living?",
+    "Dad just got diagnosed with Alzheimer's . . . ",
+    "What discounts are available to seniors?"
+  ];
+
+  // Fetch community stats
+  const { data: stats } = useQuery({
+    queryKey: ["/api/stats"],
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Fetch categories for preview
+  const { data: categories } = useQuery({
+    queryKey: ["/api/categories"],
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+  // Fetch recent posts for preview
+  const { data: recentPosts } = useQuery({
+    queryKey: ["/api/posts"],
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  });
+
+  // Typewriter effect for search placeholder
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
+    if (isTyping) {
+      const currentPhrase = searchPhrases[currentPhraseIndex];
+      
+      if (displayedText.length < currentPhrase.length) {
+        timeoutId = setTimeout(() => {
+          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1));
+        }, 50);
+      } else {
+        timeoutId = setTimeout(() => {
+          setIsTyping(false);
+          setDisplayedText("");
+          setCurrentPhraseIndex((prev) => (prev + 1) % searchPhrases.length);
+          setTimeout(() => setIsTyping(true), 500);
+        }, 2500);
+      }
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [displayedText, currentPhraseIndex, isTyping, searchPhrases]);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header onSignupClick={() => setSignupModalOpen(true)} />
+
+      {/* Welcome Hero - Split Screen Design */}
+      <section className="h-[600px]" style={{ marginBottom: '40px' }}>
+        <div className="grid lg:grid-cols-2 h-full">
+          {/* Left Side - Journey Together */}
+          <div
+            className="flex items-center justify-center p-8"
+            style={{ backgroundColor: "hsl(var(--teal-primary))" }}
+          >
+            <div className="max-w-md text-center">
+              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-8 leading-tight">
+                Journey Together.
+              </h1>
+
+              <p className="text-xl text-white/90 mb-6 leading-relaxed">
+                A Community of People Who Care
+              </p>
+
+              <div className="relative max-w-2xl mx-auto">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-teal-200" />
+                <input
+                  type="text"
+                  placeholder={displayedText}
+                  className="w-full pl-12 pr-4 py-4 text-lg rounded-xl border-0 bg-white/95 backdrop-blur-sm shadow-lg focus:ring-2 focus:ring-white/50 focus:outline-none placeholder-gray-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - AskEdith Branding */}
+          <div
+            className="flex items-center justify-center"
+            style={{ backgroundColor: "#fefbed" }}
+          >
+            <img
+              src={askEdithHeroImage}
+              alt="AskEdith Care Community"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Three Key Features */}
+      <section id="features" className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Always Here */}
+            <div className="text-center p-6">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-lg"
+                style={{ backgroundColor: "hsl(var(--coral-primary))" }}
+              >
+                24/7
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Always Here
+              </h3>
+              <p className="text-gray-600">
+                Community support around the clock when you need it most
+              </p>
+            </div>
+
+            {/* Protected Space */}
+            <div className="text-center p-6">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-lg"
+                style={{ backgroundColor: "#4A85D6" }}
+              >
+                Safe
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Protected Space
+              </h3>
+              <p className="text-gray-600">
+                Verified community with privacy protection and moderation
+              </p>
+            </div>
+
+            {/* Authentic Stories */}
+            <div className="text-center p-6">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-lg"
+                style={{ backgroundColor: "#7CB99B" }}
+              >
+                Real
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Authentic Stories
+              </h3>
+              <p className="text-gray-600">
+                Real experiences from caregivers who truly understand
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Safety Guidelines Banner */}
+      <section
+        className="py-6"
+        style={{ backgroundColor: "hsl(var(--cream-primary))" }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            className="bg-white rounded-2xl p-6 border-l-4"
+            style={{ borderColor: "hsl(var(--gold-primary))" }}
+          >
+            <div className="flex items-start space-x-3">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+                style={{ backgroundColor: "hsl(var(--gold-primary))" }}
+              >
+                !
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Community Safety Guidelines
+                </h3>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <Shield className="w-4 h-4" />
+                    <span>
+                      All discussions are public and moderated for safety
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <UserCheck className="w-4 h-4" />
+                    <span>
+                      Never share personal contact information (emails, phone
+                      numbers)
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>
+                      External links include safety warnings - verify sources
+                      before sharing personal information
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Stats */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-12">
+            Our Growing Community
+          </h2>
+
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#E8D5F3" }}
+              >
+                <Users className="w-8 h-8" style={{ color: "#8B7ED8" }} />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-1">
+                12,450
+              </div>
+              <div className="text-gray-600">Active Caregivers</div>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#D6E9FF" }}
+              >
+                <MessageSquare
+                  className="w-8 h-8"
+                  style={{ color: "#4A85D6" }}
+                />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-1">3,280</div>
+              <div className="text-gray-600">Daily Discussions</div>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#D6F3E8" }}
+              >
+                <Heart className="w-8 h-8" style={{ color: "#7CB99B" }} />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-1">580</div>
+              <div className="text-gray-600">Support Groups</div>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#FFF3D6" }}
+              >
+                <Award className="w-8 h-8" style={{ color: "#E6B85C" }} />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-1">95%</div>
+              <div className="text-gray-600">Questions Answered</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Categories Preview */}
+      <section
+        id="community-preview"
+        className="py-16"
+        style={{ backgroundColor: "hsl(var(--cream-primary))" }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Find Support in Your Area of Need
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Connect with caregivers facing similar challenges. Our community
+              is organized by care areas to help you find the most relevant
+              support and advice.
+            </p>
+          </div>
+
+          {Array.isArray(categories) && categories.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {categories.slice(0, 6).map((category: any) => (
+                <div
+                  key={category.id}
+                  className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow min-h-[200px]"
+                >
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden">
+                      <img 
+                        src={categoryImages[category.slug] || ''}
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 text-lg leading-tight">
+                        {category.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p className="text-base text-gray-600 mb-6 leading-relaxed">
+                    {category.description}
+                  </p>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1 text-sm text-gray-500">
+                      <MessageSquare className="w-4 h-4" />
+                      <span>
+                        {category.postCount ||
+                          Math.floor(Math.random() * 300) + 50}{" "}
+                        posts
+                      </span>
+                    </div>
+
+                    <div className="flex w-full rounded-lg overflow-hidden border border-gray-200 mt-4">
+                      <button 
+                        className="flex-1 text-white text-sm font-semibold py-3 hover:opacity-90 transition-opacity"
+                        style={{ 
+                          backgroundColor: category.slug === 'government-resources' ? '#F4B942' : 
+                                         category.slug === 'home-care' ? '#D2524C' :
+                                         category.slug === 'hospital-rehab' ? '#7BB46D' :
+                                         category.slug === 'senior-living' ? '#E67E22' :
+                                         category.slug === 'professional-advice' ? '#4ECDC4' :
+                                         category.slug === 'paying-for-care' ? '#7BB46D' :
+                                         category.color 
+                        }}
+                        onClick={() => setSignupModalOpen(true)}
+                      >
+                        Join
+                      </button>
+                      <div className="w-px bg-white/30"></div>
+                      <button 
+                        className="flex-1 text-white text-sm font-semibold py-3 hover:opacity-90 transition-opacity"
+                        style={{ 
+                          backgroundColor: category.slug === 'government-resources' ? '#F4B942' : 
+                                         category.slug === 'home-care' ? '#D2524C' :
+                                         category.slug === 'hospital-rehab' ? '#7BB46D' :
+                                         category.slug === 'senior-living' ? '#E67E22' :
+                                         category.slug === 'professional-advice' ? '#4ECDC4' :
+                                         category.slug === 'paying-for-care' ? '#7BB46D' :
+                                         category.color 
+                        }}
+                        onClick={() => window.location.href = `/category/${category.slug}`}
+                      >
+                        Explore
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* And Much More Button */}
+          <div className="text-center mt-8">
+            <Button 
+              variant="outline" 
+              className="px-8 py-3 text-lg font-semibold border-askEdithTeal text-askEdithTeal hover:bg-askEdithTeal hover:text-white"
+              onClick={() => setSignupModalOpen(true)}
+            >
+              And Much More
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Ready to Connect?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Join thousands of caregivers who have found their support network in
+            our community.
+          </p>
+
+          <Button
+            size="lg"
+            className="text-white px-8 py-4 rounded-xl font-semibold text-lg"
+            style={{ backgroundColor: "hsl(var(--teal-primary))" }}
+            onClick={() => setSignupModalOpen(true)}
+          >
+            <MessageSquare className="w-5 h-5 mr-2" />
+            Start a New Discussion
+          </Button>
+        </div>
+      </section>
+
+      {/* Community Values */}
+      <section
+        className="py-16"
+        style={{ backgroundColor: "hsl(var(--cream-primary))" }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+            Our Community Values
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#E8D5F3" }}
+              >
+                <Heart className="w-8 h-8" style={{ color: "#8B7ED8" }} />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Compassion First
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Every caregiver's journey is unique. We listen without judgment
+                and offer support with understanding.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#FFE8D6" }}
+              >
+                <Shield className="w-8 h-8" style={{ color: "#E6845C" }} />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Safe Space
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our community maintains strict privacy and safety guidelines to
+                protect all members.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "#E8D5F3" }}
+              >
+                <Users className="w-8 h-8" style={{ color: "#8B7ED8" }} />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                Stronger Together
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                Sharing experiences and resources helps every member of our
+                caregiving community thrive.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Discussions */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">Recent Discussions</h2>
+            <Button variant="outline" className="text-gray-600 hover:text-gray-900">
+              View All Discussions
+            </Button>
+          </div>
+          
+          <div className="space-y-6">
+            {Array.isArray(recentPosts) && recentPosts.length > 0 ? (
+              recentPosts.slice(0, 3).map((post: any) => (
+                <div key={post.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-sm transition-shadow">
+                  <div className="flex items-start space-x-4">
+                    {post.author?.profileImageUrl ? (
+                      <img 
+                        src={post.author.profileImageUrl} 
+                        alt={post.author.communityName || 'User'} 
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <DefaultProfilePicture 
+                        type={post.author?.defaultProfileType || 'daisy'} 
+                        size={40} 
+                        className="rounded-full"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span 
+                          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                          style={{ 
+                            backgroundColor: post.category?.slug === 'government-resources' ? '#F4B94220' : 
+                                           post.category?.slug === 'home-care' ? '#D2524C20' :
+                                           post.category?.slug === 'hospital-rehab' ? '#7BB46D20' :
+                                           post.category?.slug === 'senior-living' ? '#E67E2220' :
+                                           post.category?.slug === 'professional-advice' ? '#4ECDC420' :
+                                           post.category?.slug === 'paying-for-care' ? '#7BB46D20' :
+                                           '#E5E7EB',
+                            color: post.category?.slug === 'government-resources' ? '#F4B942' : 
+                                  post.category?.slug === 'home-care' ? '#D2524C' :
+                                  post.category?.slug === 'hospital-rehab' ? '#7BB46D' :
+                                  post.category?.slug === 'senior-living' ? '#E67E22' :
+                                  post.category?.slug === 'professional-advice' ? '#4ECDC4' :
+                                  post.category?.slug === 'paying-for-care' ? '#7BB46D' :
+                                  '#6B7280'
+                          }}
+                        >
+                          {post.category?.name || 'General'}
+                        </span>
+                        {post.isResolved && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Resolved
+                          </span>
+                        )}
+                      </div>
+                      
+                      <h3 className="font-semibold text-gray-900 mb-2 text-lg leading-tight">
+                        {post.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 text-sm mb-3 leading-relaxed line-clamp-2">
+                        {post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1 text-xs text-gray-500">
+                          <span>{post.author?.communityName || post.author?.firstName || 'Anonymous'}</span>
+                          <span>•</span>
+                          <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                          <div className="flex items-center space-x-1">
+                            <MessageSquare className="w-4 h-4" />
+                            <span>{post.commentCount || 0}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Heart className="w-4 h-4" />
+                            <span>{post.helpfulVotes || 0}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12">
+                <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No discussions yet</h3>
+                <p className="text-gray-500 mb-4">Be the first to start a conversation!</p>
+                <Button onClick={() => setSignupModalOpen(true)}>
+                  Start First Discussion
+                </Button>
+              </div>
+            )}
+          </div>
+          
+          {Array.isArray(recentPosts) && recentPosts.length > 0 && (
+            <div className="text-center mt-8">
+              <Button
+                size="lg"
+                className="text-white px-8 py-4 rounded-xl font-semibold text-lg"
+                style={{ backgroundColor: '#8B7ED8' }}
+                onClick={() => setSignupModalOpen(true)}
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Start a New Discussion
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <SignupModal
+        open={signupModalOpen}
+        onClose={() => setSignupModalOpen(false)}
+      />
+    </div>
+  );
+}

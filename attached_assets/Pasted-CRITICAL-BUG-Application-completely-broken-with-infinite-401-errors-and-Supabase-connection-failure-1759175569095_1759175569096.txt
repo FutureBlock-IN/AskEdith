@@ -1,0 +1,75 @@
+CRITICAL BUG: Application completely broken with infinite 401 errors and Supabase connection failures
+
+ENVIRONMENT:
+- Downloaded project as ZIP from Replit
+- Running locally in VS Code on port 5000
+- Using Clerk authentication
+- Same issues occur on both local AND live Replit URL
+
+IMPORTANT: I am NOT logged in - just trying to browse public pages, but the app is completely broken
+
+CRITICAL ISSUES:
+
+1. Infinite 401 Loop Breaking Everything
+   - Console shows hundreds of "GET http://localhost:5000/api/user 401 (Unauthorized)" errors repeating endlessly
+   - I am NOT logged in, just clicking on pages to view them
+   - The app should allow browsing public pages without authentication
+   - Instead, it tries to fetch user data infinitely even when no user is logged in
+   - This infinite loop causes browser to freeze
+   - All pages stuck on loading/buffering screen forever
+   - Cannot access ANY pages: Expert page, Dashboard, Community page - all broken
+   - Even without logging in, the app continuously retries failed requests
+
+2. Supabase Image Loading Failure
+   - Error: "GET https://tvesaresdbghbtocwpdj.supabase.co/storage/v1/object/public/expert-files/... net::ERR_NAME_NOT_RESOLVED"
+   - Images cannot load from Supabase storage
+   - DNS resolution failing for Supabase URLs
+
+3. Complete Application Failure
+   - No pages render, just infinite loading
+   - Browser performance degraded due to endless API calls
+   - Application completely unusable
+   - Refresh doesn't help - same infinite loop starts again
+   - Cannot even view public pages as a non-logged-in user
+
+ROOT CAUSES TO FIX:
+
+1. React Query Infinite Retry Loop
+   - /api/user endpoint being called infinitely even when user is not logged in
+   - App should NOT call /api/user for unauthenticated users browsing public pages
+   - Need to add: retry: false to all useQuery configurations
+   - Need to add: enabled: !!clerkUser condition to prevent calls without authentication
+   - Add proper error handling for 401 responses
+   - Allow public pages to render without requiring user data
+
+2. Clerk Integration Broken
+   - Backend /api/user endpoint not receiving or verifying Clerk tokens
+   - Frontend calling /api/user even when no Clerk session exists
+   - Need to check if Clerk user exists BEFORE making API calls
+   - Frontend not including Clerk authentication token in API headers
+   - Need to use Clerk's getToken() and include in Authorization header
+
+3. Supabase Configuration Issue
+   - Supabase URL not resolving - check environment variables
+   - May need to update Supabase project URL or check if project is active
+
+IMMEDIATE FIXES REQUIRED:
+
+Fix the infinite retry loop for unauthenticated users:
+```javascript
+// In all React Query useQuery calls:
+const { user: clerkUser, isLoaded } = useUser();
+
+useQuery({
+  queryKey: ['user'],
+  queryFn: fetchUser,
+  retry: false, // CRITICAL: Stop infinite retries
+  enabled: isLoaded && !!clerkUser, // Only fetch when Clerk user exists
+  refetchOnWindowFocus: false,
+  onError: (error) => {
+    if (error.response?.status === 401) {
+      // Stop retrying on auth errors
+      return;
+    }
+  }
+})

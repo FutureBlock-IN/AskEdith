@@ -1,0 +1,15 @@
+Thank you for providing the code for the SearchHeader component. After analyzing the React component and its associated CSS, the issue with the search bar not centering in the hero section appears to stem from the current layout configuration. The search bar is contained within a div with the class lg:col-span-9, which occupies nine columns in a 12-column grid on larger screens. However, the flex flex-col items-center justify-center styling is not effectively centering the search bar relative to the intended 25/50/25 grid structure of the content section below, likely due to insufficient width constraints or improper alignment with the grid's overall layout.
+
+To address this, the following adjustments are recommended:
+
+    Adjust the Grid Column Span: Modify the lg:col-span-9 class to lg:col-span-6 to align the center section (intended to represent 50% of the 25/50/25 structure) more accurately with the content grid below. This assumes the left section (lg:col-span-3) represents the 25% sidebar, and the right 25% can be reserved for action buttons or padding.
+    Ensure Centered Alignment: Update the inner div with flex flex-col items-center justify-center to include a max-width constraint that matches the content area's width, such as max-w-3xl, and ensure the w-full class on the textarea container is limited to this maximum width to prevent overflow.
+    Align with 25/50/25 Structure: Verify that the parent grid lg:grid-cols-12 container is properly padded and that the action buttons on the right are positioned outside the 25/50/25 grid (as they are currently absolute-positioned). Adjust the padding or margin if necessary to maintain symmetry.
+
+Please instruct Replit to implement the following changes to the code:
+
+    Replace lg:col-span-9 with lg:col-span-6 in the center div.
+    Add max-w-3xl to the flex flex-col items-center justify-center div.
+    Ensure the textarea container retains w-full but is nested within the constrained max-w-3xl parent to center properly.
+
+These modifications should align the search bar with the 50% middle section of the 25/50/25 grid structure. Please test the updated code in Replit and confirm the result.

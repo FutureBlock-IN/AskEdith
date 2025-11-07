@@ -1,0 +1,390 @@
+================================================================================
+                         CAREGIVERS COMMUNITY - DEVELOPER HANDOVER
+================================================================================
+
+## PROJECT OVERVIEW
+
+CaregiversCommunity is a full-stack platform designed to connect family caregivers 
+(primarily women aged 45-65) in a supportive community. The platform provides:
+
+- Forum-style discussions with hierarchical categories
+- Expert consultation booking and payment system
+- AI-powered content moderation
+- Achievement and voting systems
+- Content aggregation from external sources
+- Real-time search capabilities with RAG (Retrieval-Augmented Generation)
+
+Target Users: Family caregivers seeking support, guidance, and community connection.
+
+================================================================================
+## TECHNICAL STACK
+
+### Frontend
+- React 18 with TypeScript
+- Wouter for routing (lightweight React Router alternative)
+- TanStack Query (React Query) for state management and caching
+- Radix UI primitives for accessible components
+- Tailwind CSS for styling with custom theme (teal/coral color scheme)
+- Vite as build tool
+- Framer Motion for animations
+
+### Backend
+- Node.js with Express.js and TypeScript
+- PostgreSQL database with Drizzle ORM
+- Redis for caching and session storage
+- Hybrid REST/GraphQL API architecture
+- Passport.js for session-based authentication
+- OpenAI GPT-4o for content moderation
+
+### External Services
+- Stripe for payment processing (Connect integration needed)
+- SendGrid for email notifications
+- Supabase for file storage (profile images, documents)
+- OpenAI for AI moderation and RAG search
+- Google Calendar API for expert scheduling
+- Neon PostgreSQL for serverless database hosting
+
+================================================================================
+## PROJECT STRUCTURE
+
+```
+/
+├── client/                     # Frontend React application
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── ui/            # Shadcn/ui components
+│   │   │   └── *.tsx          # Custom components
+│   │   ├── hooks/             # React hooks
+│   │   ├── lib/               # Utility libraries
+│   │   ├── pages/             # Route components
+│   │   │   ├── admin/         # Admin-only pages
+│   │   │   └── *.tsx          # Individual pages
+│   │   ├── App.tsx            # Main app component with routing
+│   │   └── index.css          # Global styles
+│   └── public/                # Static assets
+├── server/                     # Backend Express application
+│   ├── graphql/               # GraphQL server setup
+│   ├── middleware/            # Express middleware
+│   ├── services/              # Business logic services
+│   │   ├── rag/              # RAG search implementation
+│   │   ├── calendarService.ts
+│   │   ├── emailService.ts
+│   │   ├── stripeService.ts
+│   │   └── *.ts
+│   ├── auth.ts               # Authentication logic
+│   ├── db.ts                 # Database connection
+│   ├── routes.ts             # API route definitions
+│   └── index.ts              # Server entry point
+├── shared/
+│   └── schema.ts             # Drizzle database schema and types
+├── migrations/               # Database migration files
+├── data/                     # Seed data and scripts
+├── attached_assets/          # User-uploaded assets
+├── package.json              # Dependencies and scripts
+├── vite.config.ts           # Vite configuration
+├── drizzle.config.ts        # Database configuration
+└── replit.md                # Project documentation
+```
+
+================================================================================
+## DATABASE SCHEMA OVERVIEW
+
+### Core Tables:
+- **users**: User accounts with roles (user, admin, expert)
+- **categories**: Forum categories with hierarchical structure
+- **posts**: Discussion posts with voting and moderation
+- **comments**: Threaded comments on posts
+- **votes**: User voting on posts/comments
+
+### Expert System:
+- **expertVerifications**: Expert application and verification data
+- **consultations**: Consultation bookings and payments
+- **expertAvailability**: Expert scheduling availability
+- **appointments**: Appointment bookings with payment tracking
+
+### Content & Moderation:
+- **moderationResults**: AI moderation results
+- **postSources**: Attribution for expert content
+- **contentSources**: External content sources for "This Week by..."
+- **searchLogs**: Search analytics and query tracking
+
+### RAG System:
+- **qaKnowledge**: Knowledge base for AI search
+- **qaEmbeddings**: Vector embeddings for semantic search
+
+### Infrastructure:
+- **sessions**: User session storage
+- **achievements**: Gamification system
+- **userAchievements**: User achievement tracking
+
+================================================================================
+## KEY FEATURES & FUNCTIONALITY
+
+### 1. Authentication & User Management
+- Session-based authentication with Passport.js
+- Role-based access control (user, admin, expert)
+- Email verification system
+- Password reset functionality
+- Profile customization with image uploads
+
+### 2. Forum System
+- Hierarchical category structure
+- Rich text posts with content attribution
+- Threaded comment system
+- Voting system (helpful/unhelpful)
+- AI-powered content moderation
+
+### 3. Expert Consultation System
+- Expert application with $100 verification fee
+- Expert directory with profiles and ratings
+- Consultation booking with calendar integration
+- Payment processing via Stripe
+- Timezone-aware scheduling
+
+### 4. Content Aggregation
+- "This Week by..." feature
+- External content source management
+- Social media embed support
+- RSS feed integration
+
+### 5. Search & AI Features
+- RAG-powered semantic search
+- OpenAI integration for content answers
+- Search analytics and logging
+- Admin search management tools
+
+### 6. Admin Features
+- Content moderation dashboard
+- User management
+- Expert verification workflow
+- System analytics and monitoring
+
+================================================================================
+## API ENDPOINTS OVERVIEW
+
+### Authentication
+- POST /api/auth/login
+- POST /api/auth/register
+- POST /api/auth/logout
+- GET /api/user (current user info)
+
+### Forum
+- GET /api/posts (with filtering, pagination)
+- POST /api/posts (create post)
+- GET /api/posts/:id
+- POST /api/posts/:id/comments
+- POST /api/votes
+
+### Categories
+- GET /api/categories
+- POST /api/categories (admin only)
+
+### Expert System
+- POST /api/experts/apply
+- GET /api/experts
+- GET /api/experts/:id
+- POST /api/consultations/book
+- GET /api/consultations
+
+### Payments (Stripe)
+- POST /api/experts/create-verification-payment-intent
+- POST /api/experts/confirm-verification-payment
+- POST /api/consultations/create-payment
+- POST /api/stripe/webhook
+
+### Search & RAG
+- POST /api/rag/search
+- POST /api/rag/admin/ingest
+
+### Admin
+- GET /api/admin/stats
+- GET /api/admin/users
+- PUT /api/admin/users/:id/role
+
+================================================================================
+## ENVIRONMENT SETUP
+
+### Required Environment Variables:
+```
+# Database
+DATABASE_URL=postgresql://...
+
+# Redis (optional - app works without)
+REDIS_URL=redis://...
+
+# Stripe
+STRIPE_SECRET_KEY=sk_test_...
+VITE_STRIPE_PUBLIC_KEY=pk_test_...
+
+# OpenAI
+OPENAI_API_KEY=sk-...
+
+# SendGrid
+SENDGRID_API_KEY=SG...
+
+# Supabase
+SUPABASE_URL=https://...
+SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
+# Google Calendar (optional)
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+```
+
+### Development Setup:
+1. Install dependencies: `npm install`
+2. Set up environment variables
+3. Initialize database: `npm run db:push`
+4. Seed initial data: `npm run seed`
+5. Start development server: `npm run dev`
+
+### Available Scripts:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run check` - TypeScript type checking
+- `npm run db:push` - Push schema changes to database
+- `npm run db:generate` - Generate migration files
+- `npm run seed` - Seed database with initial data
+
+================================================================================
+## CURRENT ISSUES & IMPORTANT NOTES
+
+### 🚨 CRITICAL PAYMENT ISSUE
+The payment system currently collects funds directly to the platform owner's Stripe 
+account. Stripe Connect integration is NOT implemented, meaning:
+- Expert payouts are not automated
+- Platform commission collection is not implemented
+- All consultation payments go to main account
+
+ACTION REQUIRED: Implement Stripe Connect for proper fund distribution.
+
+### Known Issues:
+1. **Stripe Configuration**: App gracefully handles missing Stripe keys in development
+2. **Redis Optional**: App continues to work without Redis (uses memory fallback)
+3. **Email Verification**: SendGrid integration needs proper template setup
+4. **Mobile Optimization**: Some components need responsive design improvements
+5. **Error Handling**: Some API endpoints need better error responses
+
+### Recent Fixes:
+- Fixed port conflict issues during startup
+- Improved Stripe initialization error handling
+- Added graceful fallbacks for missing environment variables
+
+================================================================================
+## DEPLOYMENT INFORMATION
+
+### Production Requirements:
+- Node.js 18+ environment
+- PostgreSQL database (Neon recommended)
+- Redis instance (optional but recommended)
+- Environment variables configured
+- Static file serving capability
+
+### Replit Deployment:
+- Uses built-in PostgreSQL and Redis
+- Automatic environment variable management
+- Single-command deployment via "Start application" workflow
+
+### Build Process:
+1. Frontend builds to `dist/public/`
+2. Backend compiles to `dist/`
+3. Single server serves both API and static files on port 5000
+
+================================================================================
+## AREAS FOR IMPROVEMENT
+
+### Immediate Priorities:
+1. **Stripe Connect Integration**: Implement proper payment distribution
+2. **Expert Payout System**: Automate expert payment processing
+3. **Email Templates**: Design proper notification email templates
+4. **Mobile UI**: Improve responsive design across all components
+5. **Error Monitoring**: Add comprehensive error tracking and logging
+
+### Future Enhancements:
+1. **Real-time Notifications**: WebSocket integration for live updates
+2. **Video Consultations**: Integrate video calling capability
+3. **Advanced Search**: Improve search with filters and sorting
+4. **Analytics Dashboard**: Enhanced analytics for admins and experts
+5. **Mobile App**: React Native or PWA development
+6. **API Rate Limiting**: Implement proper rate limiting and security
+7. **Content Recommendation**: AI-powered content recommendation system
+
+### Performance Optimizations:
+1. **Database Indexing**: Add indexes for frequently queried fields
+2. **Caching Strategy**: Expand Redis caching to more endpoints
+3. **Image Optimization**: Implement image compression and CDN
+4. **Bundle Splitting**: Optimize frontend bundle size
+5. **Database Connection Pooling**: Implement connection pooling for better performance
+
+================================================================================
+## DEVELOPER NOTES
+
+### Code Style:
+- TypeScript throughout (strict mode enabled)
+- ESLint and Prettier configured
+- Component composition over inheritance
+- Functional components with hooks
+- Zod for runtime type validation
+
+### Key Patterns:
+- TanStack Query for server state management
+- Drizzle ORM for type-safe database operations
+- Radix UI for accessible component primitives
+- Custom hooks for business logic
+- Service layer pattern in backend
+
+### Testing:
+- No test suite currently implemented
+- Recommended: Jest + React Testing Library for frontend
+- Recommended: Supertest for API testing
+- Consider E2E testing with Playwright
+
+### Security Considerations:
+- Session-based authentication (consider JWT for stateless auth)
+- Content moderation prevents harmful content
+- Rate limiting needed for API endpoints
+- Input validation with Zod schemas
+- SQL injection protection via Drizzle ORM
+
+================================================================================
+## GETTING STARTED AS A NEW DEVELOPER
+
+1. **Read the Documentation**: Start with replit.md for project overview
+2. **Set Up Environment**: Configure all required environment variables
+3. **Explore the Database**: Use `npm run db:health` to check database connection
+4. **Run Development Server**: `npm run dev` and explore the application
+5. **Check Admin Panel**: Access admin features at /admin/dashboard
+6. **Review API Routes**: Examine server/routes.ts for API structure
+7. **Understand Data Flow**: Follow a user action from frontend to database
+8. **Test Payment Flow**: Set up Stripe test keys and test consultation booking
+9. **Explore RAG System**: Try the AI search feature and understand implementation
+
+### Recommended Learning Path:
+1. Understand the database schema (shared/schema.ts)
+2. Explore authentication flow (server/auth.ts)
+3. Review main API routes (server/routes.ts)
+4. Examine React routing (client/src/App.tsx)
+5. Study component architecture (client/src/components/)
+6. Understand payment integration (server/services/stripeService.ts)
+7. Review content moderation (server/moderation.ts)
+
+### Key Files to Study:
+- `shared/schema.ts` - Database schema and types
+- `server/routes.ts` - API endpoint definitions
+- `client/src/App.tsx` - Frontend routing and structure
+- `server/auth.ts` - Authentication logic
+- `server/services/stripeService.ts` - Payment processing
+- `client/src/hooks/useAuth.tsx` - Frontend authentication
+
+================================================================================
+
+For questions or clarification, refer to the existing documentation files:
+- replit.md (project overview)
+- PAYMENT_DOCUMENTATION.md (payment system details)
+- DEPLOYMENT.md (deployment instructions)
+
+Good luck with development! 🚀
+
+================================================================================

@@ -1,0 +1,1 @@
+DROP INDEX "qa_embeddings_embedding_idx";

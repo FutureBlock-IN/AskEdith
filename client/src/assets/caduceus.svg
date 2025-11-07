@@ -1,0 +1,30 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Wings -->
+  <path d="M35 25 Q25 20 15 25 Q20 15 30 20 Q35 15 40 20 L35 25" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+  <path d="M65 25 Q75 20 85 25 Q80 15 70 20 Q65 15 60 20 L65 25" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+  
+  <!-- Central staff -->
+  <line x1="50" y1="20" x2="50" y2="90" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Top knob -->
+  <circle cx="50" cy="20" r="4" fill="currentColor"/>
+  
+  <!-- First snake (left to right spiral) -->
+  <path d="M40 35 Q55 40 45 50 Q35 55 50 60 Q65 65 55 75" 
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Second snake (right to left spiral) -->
+  <path d="M60 35 Q45 40 55 50 Q65 55 50 60 Q35 65 45 75" 
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Snake heads -->
+  <circle cx="45" cy="75" r="3" fill="currentColor"/>
+  <circle cx="55" cy="75" r="3" fill="currentColor"/>
+  
+  <!-- Snake eyes -->
+  <circle cx="44" cy="74" r="0.8" fill="white"/>
+  <circle cx="56" cy="74" r="0.8" fill="white"/>
+  
+  <!-- Bottom sphere -->
+  <circle cx="50" cy="85" r="4" fill="currentColor"/>
+</svg>

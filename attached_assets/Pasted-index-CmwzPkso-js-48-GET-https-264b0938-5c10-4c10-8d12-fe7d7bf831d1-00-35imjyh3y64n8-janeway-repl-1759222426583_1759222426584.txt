@@ -1,0 +1,127 @@
+index-CmwzPkso.js:48  GET https://264b0938-5c10-4c10-8d12-fe7d7bf831d1-00-35imjyh3y64n8.janeway.replit.dev/api/posts/13/is-favorited 401 (Unauthorized)
+(anonymous) @ index-CmwzPkso.js:48
+await in (anonymous)
+a @ index-CmwzPkso.js:48
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+onSubscribe @ index-CmwzPkso.js:48
+subscribe @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+QC @ index-CmwzPkso.js:38
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+G4 @ index-CmwzPkso.js:40
+Ga @ index-CmwzPkso.js:40
+kj @ index-CmwzPkso.js:40
+Fa @ index-CmwzPkso.js:38
+(anonymous) @ index-CmwzPkso.js:40
+setTimeout
+i @ index-CmwzPkso.js:48
+o @ index-CmwzPkso.js:48
+batch @ index-CmwzPkso.js:48
+si @ index-CmwzPkso.js:48
+setData @ index-CmwzPkso.js:48
+onSuccess @ index-CmwzPkso.js:48
+h @ index-CmwzPkso.js:48
+Promise.then
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+onSubscribe @ index-CmwzPkso.js:48
+subscribe @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+QC @ index-CmwzPkso.js:38
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+G4 @ index-CmwzPkso.js:40
+Ga @ index-CmwzPkso.js:40
+kj @ index-CmwzPkso.js:40
+Fa @ index-CmwzPkso.js:38
+(anonymous) @ index-CmwzPkso.js:40
+setTimeout
+i @ index-CmwzPkso.js:48
+o @ index-CmwzPkso.js:48
+batch @ index-CmwzPkso.js:48
+si @ index-CmwzPkso.js:48
+setData @ index-CmwzPkso.js:48
+onSuccess @ index-CmwzPkso.js:48
+h @ index-CmwzPkso.js:48
+Promise.then
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+setOptions @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+(anonymous) @ index-CmwzPkso.js:40
+k @ index-CmwzPkso.js:25
+R @ index-CmwzPkso.js:25Understand this error
+index-CmwzPkso.js:48  GET https://264b0938-5c10-4c10-8d12-fe7d7bf831d1-00-35imjyh3y64n8.janeway.replit.dev/api/posts/10/is-favorited 401 (Unauthorized)
+(anonymous) @ index-CmwzPkso.js:48
+await in (anonymous)
+a @ index-CmwzPkso.js:48
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+onSubscribe @ index-CmwzPkso.js:48
+subscribe @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+QC @ index-CmwzPkso.js:38
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+G4 @ index-CmwzPkso.js:40
+Ga @ index-CmwzPkso.js:40
+kj @ index-CmwzPkso.js:40
+Fa @ index-CmwzPkso.js:38
+(anonymous) @ index-CmwzPkso.js:40
+setTimeout
+i @ index-CmwzPkso.js:48
+o @ index-CmwzPkso.js:48
+batch @ index-CmwzPkso.js:48
+si @ index-CmwzPkso.js:48
+setData @ index-CmwzPkso.js:48
+onSuccess @ index-CmwzPkso.js:48
+h @ index-CmwzPkso.js:48
+Promise.then
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+onSubscribe @ index-CmwzPkso.js:48
+subscribe @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+QC @ index-CmwzPkso.js:38
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+G4 @ index-CmwzPkso.js:40
+Ga @ index-CmwzPkso.js:40
+kj @ index-CmwzPkso.js:40
+Fa @ index-CmwzPkso.js:38
+(anonymous) @ index-CmwzPkso.js:40
+setTimeout
+i @ index-CmwzPkso.js:48
+o @ index-CmwzPkso.js:48
+batch @ index-CmwzPkso.js:48
+si @ index-CmwzPkso.js:48
+setData @ index-CmwzPkso.js:48
+onSuccess @ index-CmwzPkso.js:48
+h @ index-CmwzPkso.js:48
+Promise.then
+w @ index-CmwzPkso.js:48
+start @ index-CmwzPkso.js:48
+fetch @ index-CmwzPkso.js:48
+ru @ index-CmwzPkso.js:48
+setOptions @ index-CmwzPkso.js:48
+(anonymous) @ index-CmwzPkso.js:48
+km @ index-CmwzPkso.js:40
+jl @ index-CmwzPkso.js:40
+(anonymous) @ index-CmwzPkso.js:40
+k @ index-CmwzPkso.js:25
+R @ index-CmwzPkso.js:25Understand this error
+index-CmwzPkso.js:48  GET https://264b0938-5c10-4c10-8d12-fe7d7bf831d1-00-35imjyh3y64n8.janeway.replit.dev/api/posts/12/is-favorited 401 (Unauthorized)

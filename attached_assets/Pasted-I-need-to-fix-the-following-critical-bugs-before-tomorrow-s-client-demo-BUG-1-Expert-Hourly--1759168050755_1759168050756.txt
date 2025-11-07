@@ -1,0 +1,50 @@
+I need to fix the following critical bugs before tomorrow's client demo:
+
+## BUG 1: Expert Hourly Rate Not Saving
+- ISSUE: When I signup as an expert and set hourly rate to $300 in onboarding, it shows default rate $100 instead
+- EXPECTED: Display the hourly rate ($300) that I set during onboarding
+- CURRENT: Always showing $100 as default rate
+- FIX NEEDED: Save and display the correct hourly rate from onboarding
+
+## BUG 2: Expert Profile Page Shows "Not Found"
+- ISSUE: After completing profile, when I click "View Profile" button on experts page, getting "Not Found" error
+- EXPECTED: Show expert profile details (without booking button until admin approves)
+- CURRENT: "Not Found" error page
+- FIX NEEDED: 
+  * Show expert profile details immediately after profile completion
+  * Hide "Book Appointment" button until admin approval
+  * Show "Book Appointment" button only after admin approves the profile
+  * Customers should be able to VIEW profile before approval, just can't book
+
+## BUG 3: Approval Badge Not Updating in Real-time
+- ISSUE: After admin approves my profile, experts page still shows "Waiting for Approval" badge. Only shows "Verified Expert" after browser refresh
+- EXPECTED: Badge should update to "Verified Expert" immediately when admin approves
+- CURRENT: Requires manual browser refresh to see "Verified Expert" badge
+- FIX NEEDED: Update badge in real-time without page refresh when admin approves
+
+## BUG 4: Performance Issues and Loading Problems
+- ISSUE: Multiple pages are loading slowly with buffering/loading spinners
+- SPECIFIC PROBLEMS:
+  * Expert pages taking too long to load
+  * Other pages also loading slowly
+  * Sometimes clicking pages shows loading/buffering indefinitely
+- FIX NEEDED:
+  * Check browser console for errors and fix them
+  * Optimize page loading performance
+  * Check database queries for optimization
+  * Review all pages for performance bottlenecks
+  * Test all navigation flows
+
+## URGENT REQUEST:
+Please thoroughly check the ENTIRE application for:
+- Any other bugs or errors
+- Console errors in browser logs
+- Server errors in backend logs
+- Slow loading pages
+- Broken navigation or links
+- Data not saving correctly
+- UI/UX issues
+
+**DEADLINE: Tomorrow is client demo - all issues must be fixed today**
+
+I have attached screenshots showing these issues. Please prioritize these bugs and ensure the application is stable and performant for tomorrow's demo.

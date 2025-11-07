@@ -1,0 +1,174 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+Setting SendGrid API key, length: 69
+API key prefix: SG.fP2G
+🚀 GraphQL server ready at http://localhost:5000/graphql
+Serving static files in built mode
+5:03:58 PM [express] serving on 0.0.0.0:5000
+✓ Server successfully started on port 5000
+5:03:59 PM [express] GET /api/user 304 in 148ms :: {"id":"user_1752780271138_rbkd6a5ae","username":"…
+GET /api/posts params: { categoryId: undefined, limit: 20, offset: 0, sortBy: 'top' }
+Returning 15 posts
+5:04:00 PM [express] GET /api/posts 304 in 193ms :: [{"id":18,"title":"Drug Interactions Every Careg…
+5:04:00 PM [express] GET /api/categories/level/0 304 in 279ms :: [{"id":336,"name":"Advice Between G…
+5:04:00 PM [express] GET /api/categories 304 in 301ms :: [{"id":336,"name":"Advice Between Generatio…
+5:04:00 PM [express] GET /api/search-phrases 304 in 372ms :: [{"id":1,"phrase":"Edith, does Medicare…
+5:04:00 PM [express] GET /api/categories/hierarchy 304 in 408ms :: [{"id":336,"name":"Advice Between…
+5:04:02 PM [express] GET /api/posts/18/is-favorited 304 in 146ms :: {"isFavorited":true}
+5:04:02 PM [express] GET /api/posts/19/is-favorited 304 in 141ms :: {"isFavorited":true}
+5:04:02 PM [express] GET /api/posts/7/is-favorited 304 in 145ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/18/favorite-count 304 in 148ms :: {"count":"2"}
+5:04:02 PM [express] GET /api/posts/19/favorite-count 304 in 255ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/9/is-favorited 304 in 149ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/9/favorite-count 304 in 143ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/8/is-favorited 304 in 139ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/8/favorite-count 304 in 142ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/7/favorite-count 304 in 361ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/6/is-favorited 304 in 147ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/16/is-favorited 200 in 141ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/16/favorite-count 200 in 142ms :: {"count":"0"}
+5:04:02 PM [express] GET /api/posts/6/favorite-count 304 in 142ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/5/is-favorited 304 in 147ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/5/favorite-count 304 in 144ms :: {"count":"1"}
+5:04:02 PM [express] GET /api/posts/15/favorite-count 200 in 148ms :: {"count":"0"}
+5:04:02 PM [express] GET /api/posts/14/is-favorited 200 in 144ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/17/is-favorited 304 in 138ms :: {"isFavorited":false}
+5:04:02 PM [express] GET /api/posts/14/favorite-count 200 in 142ms :: {"count":"0"}
+5:04:02 PM [express] GET /api/posts/13/is-favorited 200 in 142ms :: {"isFavorited":false}
+5:04:03 PM [express] GET /api/posts/17/favorite-count 304 in 149ms :: {"count":"0"}
+5:04:03 PM [express] GET /api/posts/13/favorite-count 200 in 143ms :: {"count":"0"}
+5:04:03 PM [express] GET /api/posts/12/favorite-count 200 in 138ms :: {"count":"0"}
+5:04:03 PM [express] GET /api/posts/11/is-favorited 200 in 142ms :: {"isFavorited":false}
+5:04:03 PM [express] GET /api/posts/12/is-favorited 200 in 151ms :: {"isFavorited":false}
+5:04:03 PM [express] GET /api/posts/15/is-favorited 304 in 142ms :: {"isFavorited":false}
+5:04:03 PM [express] GET /api/posts/11/favorite-count 200 in 141ms :: {"count":"0"}
+5:04:03 PM [express] GET /api/posts/10/is-favorited 200 in 145ms :: {"isFavorited":false}
+5:04:03 PM [express] GET /api/posts/10/favorite-count 200 in 155ms :: {"count":"0"}
+5:04:09 PM [express] GET /api/user 401 in 1ms
+GET /api/posts params: { categoryId: undefined, limit: 20, offset: 0, sortBy: 'hot' }
+5:04:09 PM [express] GET /api/search-phrases 200 in 50ms :: [{"id":1,"phrase":"Edith, does Medicare …
+5:04:09 PM [express] GET /api/categories 200 in 89ms :: [{"id":336,"name":"Advice Between Generation…
+Returning 15 posts
+5:04:09 PM [express] GET /api/posts 200 in 91ms :: [{"id":19,"title":"Hello World - Advice Between G…
+5:04:09 PM [express] GET /api/stats 200 in 182ms :: {"totalUsers":16,"totalPosts":15,"totalComments"…
+5:05:19 PM [express] GET /api/user 304 in 143ms :: {"id":"user_1752780271138_rbkd6a5ae","username":"…
+5:05:20 PM [express] GET /api/search-phrases 304 in 264ms :: [{"id":1,"phrase":"Edith, does Medicare…
+5:05:20 PM [express] GET /api/categories/level/0 304 in 359ms :: [{"id":336,"name":"Advice Between G…
+5:05:20 PM [express] GET /api/categories 304 in 402ms :: [{"id":336,"name":"Advice Between Generatio…
+GET /api/posts params: { categoryId: undefined, limit: 20, offset: 0, sortBy: 'top' }
+Returning 15 posts
+5:05:20 PM [express] GET /api/categories/hierarchy 304 in 545ms :: [{"id":336,"name":"Advice Between…
+5:05:20 PM [express] GET /api/posts 304 in 548ms :: [{"id":18,"title":"Drug Interactions Every Careg…
+5:05:20 PM [express] GET /api/posts/19/is-favorited 304 in 143ms :: {"isFavorited":true}
+5:05:20 PM [express] GET /api/posts/18/favorite-count 304 in 148ms :: {"count":"2"}
+5:05:20 PM [express] GET /api/posts/7/favorite-count 304 in 172ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/19/favorite-count 304 in 175ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/18/is-favorited 304 in 225ms :: {"isFavorited":true}
+5:05:20 PM [express] GET /api/posts/7/is-favorited 304 in 257ms :: {"isFavorited":false}
+5:05:20 PM [express] GET /api/posts/9/favorite-count 304 in 142ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/9/is-favorited 304 in 147ms :: {"isFavorited":false}
+5:05:20 PM [express] GET /api/posts/8/is-favorited 304 in 142ms :: {"isFavorited":false}
+5:05:20 PM [express] GET /api/posts/8/favorite-count 304 in 141ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/6/is-favorited 304 in 149ms :: {"isFavorited":false}
+5:05:20 PM [express] GET /api/posts/6/favorite-count 304 in 152ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/5/is-favorited 304 in 145ms :: {"isFavorited":false}
+5:05:20 PM [express] GET /api/posts/5/favorite-count 304 in 144ms :: {"count":"1"}
+5:05:20 PM [express] GET /api/posts/17/favorite-count 304 in 140ms :: {"count":"0"}
+5:05:20 PM [express] GET /api/posts/17/is-favorited 304 in 143ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/16/is-favorited 304 in 146ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/16/favorite-count 304 in 154ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/15/favorite-count 304 in 139ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/15/is-favorited 304 in 144ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/14/favorite-count 304 in 141ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/14/is-favorited 304 in 144ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/13/is-favorited 304 in 144ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/13/favorite-count 304 in 148ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/12/is-favorited 304 in 145ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/12/favorite-count 304 in 142ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/11/is-favorited 304 in 144ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/11/favorite-count 304 in 143ms :: {"count":"0"}
+5:05:21 PM [express] GET /api/posts/10/is-favorited 304 in 144ms :: {"isFavorited":false}
+5:05:21 PM [express] GET /api/posts/10/favorite-count 304 in 148ms :: {"count":"0"}
+5:05:49 PM [express] GET /api/posts/18/comments 304 in 374ms :: [{"id":16,"content":"Thank you Rober…
+5:05:49 PM [express] GET /api/posts/19/comments 304 in 377ms :: []
+5:05:51 PM [express] GET /api/user 200 in 149ms :: {"id":"user_1752780271138_rbkd6a5ae","username":"…
+5:05:51 PM [express] GET /api/search-phrases 200 in 151ms :: [{"id":1,"phrase":"Edith, does Medicare…
+5:05:51 PM [express] GET /api/categories/level/0 200 in 151ms :: [{"id":336,"name":"Advice Between G…
+GET /api/posts params: { categoryId: undefined, limit: 20, offset: 0, sortBy: 'top' }
+5:05:51 PM [express] GET /api/categories 200 in 311ms :: [{"id":336,"name":"Advice Between Generatio…
+Returning 15 posts
+5:05:51 PM [express] GET /api/categories/hierarchy 200 in 394ms :: [{"id":336,"name":"Advice Between…
+5:05:51 PM [express] GET /api/posts 200 in 400ms :: [{"id":18,"title":"Drug Interactions Every Careg…
+5:05:51 PM [express] GET /api/posts/19/favorite-count 200 in 143ms :: {"count":"1"}
+5:05:51 PM [express] GET /api/posts/18/favorite-count 200 in 145ms :: {"count":"2"}
+5:05:51 PM [express] GET /api/posts/18/is-favorited 200 in 147ms :: {"isFavorited":true}
+5:05:51 PM [express] GET /api/posts/19/is-favorited 200 in 147ms :: {"isFavorited":true}
+5:05:51 PM [express] GET /api/posts/7/favorite-count 200 in 268ms :: {"count":"1"}
+5:05:52 PM [express] GET /api/posts/9/favorite-count 200 in 141ms :: {"count":"1"}
+5:05:52 PM [express] GET /api/posts/8/favorite-count 200 in 140ms :: {"count":"1"}
+5:05:52 PM [express] GET /api/posts/9/is-favorited 200 in 152ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/8/is-favorited 200 in 153ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/7/is-favorited 200 in 370ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/6/is-favorited 200 in 147ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/6/favorite-count 200 in 150ms :: {"count":"1"}
+5:05:52 PM [express] GET /api/posts/5/is-favorited 200 in 148ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/5/favorite-count 200 in 149ms :: {"count":"1"}
+5:05:52 PM [express] GET /api/posts/17/is-favorited 200 in 151ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/17/favorite-count 200 in 144ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/16/is-favorited 200 in 157ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/15/is-favorited 200 in 142ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/16/favorite-count 200 in 145ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/14/is-favorited 200 in 147ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/15/favorite-count 200 in 150ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/14/favorite-count 200 in 145ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/13/is-favorited 200 in 147ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/13/favorite-count 200 in 149ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/12/is-favorited 200 in 147ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/11/is-favorited 200 in 144ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/12/favorite-count 200 in 146ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/11/favorite-count 200 in 146ms :: {"count":"0"}
+5:05:52 PM [express] GET /api/posts/10/is-favorited 200 in 149ms :: {"isFavorited":false}
+5:05:52 PM [express] GET /api/posts/10/favorite-count 200 in 149ms :: {"count":"0"}
+5:06:27 PM [express] GET /api/posts/18/comments 200 in 508ms :: [{"id":16,"content":"Thank you Rober…
+5:06:27 PM [express] GET /api/posts/19/comments 200 in 522ms :: []
+5:09:43 PM [express] GET /api/user 304 in 145ms :: {"id":"user_1752780271138_rbkd6a5ae","username":"…
+5:09:43 PM [express] GET /api/categories/level/0 304 in 171ms :: [{"id":336,"name":"Advice Between G…
+5:09:43 PM [express] GET /api/search-phrases 304 in 269ms :: [{"id":1,"phrase":"Edith, does Medicare…
+GET /api/posts params: { categoryId: undefined, limit: 20, offset: 0, sortBy: 'top' }
+5:09:45 PM [express] GET /api/categories/hierarchy 304 in 2409ms :: [{"id":336,"name":"Advice Betwee…
+5:09:45 PM [express] GET /api/categories 304 in 2412ms :: [{"id":336,"name":"Advice Between Generati…
+Returning 15 posts
+5:09:45 PM [express] GET /api/posts 304 in 2533ms :: [{"id":18,"title":"Drug Interactions Every Care…
+5:09:46 PM [express] GET /api/posts/18/is-favorited 304 in 141ms :: {"isFavorited":true}
+5:09:46 PM [express] GET /api/posts/18/favorite-count 304 in 143ms :: {"count":"2"}
+5:09:46 PM [express] GET /api/posts/19/favorite-count 304 in 142ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/19/is-favorited 304 in 273ms :: {"isFavorited":true}
+5:09:46 PM [express] GET /api/posts/7/is-favorited 304 in 276ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/9/is-favorited 304 in 142ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/9/favorite-count 304 in 145ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/8/is-favorited 304 in 142ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/7/favorite-count 304 in 380ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/8/favorite-count 304 in 141ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/6/is-favorited 304 in 141ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/6/favorite-count 304 in 149ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/5/is-favorited 304 in 143ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/5/favorite-count 304 in 144ms :: {"count":"1"}
+5:09:46 PM [express] GET /api/posts/17/is-favorited 304 in 141ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/16/is-favorited 304 in 146ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/16/favorite-count 304 in 144ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/15/is-favorited 304 in 145ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/15/favorite-count 304 in 145ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/17/favorite-count 304 in 251ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/14/is-favorited 304 in 202ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/14/favorite-count 304 in 144ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/13/is-favorited 304 in 143ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/13/favorite-count 304 in 141ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/12/is-favorited 304 in 143ms :: {"isFavorited":false}
+5:09:46 PM [express] GET /api/posts/12/favorite-count 304 in 142ms :: {"count":"0"}
+5:09:46 PM [express] GET /api/posts/11/is-favorited 304 in 141ms :: {"isFavorited":false}
+5:09:47 PM [express] GET /api/posts/11/favorite-count 304 in 144ms :: {"count":"0"}
+5:09:47 PM [express] GET /api/posts/10/is-favorited 304 in 142ms :: {"isFavorited":false}
+5:09:47 PM [express] GET /api/posts/10/favorite-count 304 in 140ms :: {"count":"0"}
+5:10:01 PM [express] GET /api/posts/19/comments 304 in 396ms :: []
