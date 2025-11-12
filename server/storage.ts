@@ -91,6 +91,7 @@ import {
   type Appointment,
   type InsertAppointment,
 } from "@shared/schema";
+import { promptQuotaLog } from "@shared/schema";  // QUOTA LOG TABLE IMPORTS
 
 // Extend the base User type to include role
 type UserWithRole = User & {
@@ -98,7 +99,7 @@ type UserWithRole = User & {
 };
 import { db } from "./db";
 import { TimezoneService } from "./services/timezoneService";
-import { eq, desc, and, sql, count, or, ilike, gte, lte, lt, ne, like } from "drizzle-orm";
+import { eq, desc, and, sql, count, or, ilike, gte, lte, lt, ne, like, isNull } from "drizzle-orm"; // QUOTA LOG TABLE
 
 // Date validation helper function
 function isValidDateFormat(date: string): boolean {
@@ -120,6 +121,7 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getAdmins(): Promise<User[]>;
   createUser(user: UpsertUser): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserStripeInfo(userId: string, stripeInfo: { customerId: string; subscriptionId: string }): Promise<User>;
@@ -272,6 +274,11 @@ export class DatabaseStorage implements IStorage {
   async getUserByEmail(email: string): Promise<UserWithRole | undefined> {
     const [user] = await db.select().from(users).where(ilike(users.email, email));
     return user ? { ...user, role: user.role as UserRole } : undefined;
+  }
+
+  async getAdmins(): Promise<UserWithRole[]> {
+    const admins = await db.select().from(users).where(eq(users.role, 'admin'));
+    return admins.map(u => ({ ...u, role: u.role as UserRole }));
   }
 
   async createUser(userData: UpsertUser): Promise<UserWithRole> {
@@ -2237,6 +2244,141 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(desc(searchLogs.createdAt));
+  }
+
+  // Prompt quota operations
+  async getPromptUsageByUser(userId: string): Promise<any | null> {
+    const [row] = await db
+      .select()
+      .from(promptQuotaLog)
+      .where(eq(promptQuotaLog.userId, userId))
+      .limit(1);
+    return row || null;
+  }
+
+  async getPromptUsageByIp(ipAddress: string): Promise<any | null> {
+    // For guest quota checks, only get records where userId is NULL
+    // (logged-in users have their own records with userId set)
+    const [row] = await db
+      .select()
+      .from(promptQuotaLog)
+      .where(
+        and(
+          eq(promptQuotaLog.ipAddress, ipAddress),
+          isNull(promptQuotaLog.userId)
+        )
+      )
+      .limit(1);
+    return row || null;
+  }
+
+  async resetPromptUsage(id: number): Promise<void> {
+    await db
+      .update(promptQuotaLog)
+      .set({ promptCount: 0, firstUsedAt: new Date(), lastUsedAt: new Date() })
+      .where(eq(promptQuotaLog.id, id));
+  }
+
+  async incrementPromptUsageForIp(ipAddress: string, userId?: string): Promise<void> {
+    // For guests (no userId), only look for records with userId IS NULL
+    // For logged-in users, this shouldn't be called (they use ensurePromptUsageRecord)
+    const whereCondition = userId 
+      ? eq(promptQuotaLog.ipAddress, ipAddress)
+      : and(
+          eq(promptQuotaLog.ipAddress, ipAddress),
+          isNull(promptQuotaLog.userId)
+        );
+
+    const [existing] = await db
+      .select()
+      .from(promptQuotaLog)
+      .where(whereCondition)
+      .limit(1);
+
+    if (!existing) {
+      // Create new record (for guests, userId will be null)
+      await db.insert(promptQuotaLog).values({
+        ipAddress,
+        userId: userId || null,
+        promptCount: 1,
+        firstUsedAt: new Date(),
+        lastUsedAt: new Date(),
+      } as any);
+      return;
+    }
+    
+    // Update count (only for guest records - logged-in users shouldn't reach here)
+    await db
+      .update(promptQuotaLog)
+      .set({
+        promptCount: sql`${promptQuotaLog.promptCount} + 1`,
+        lastUsedAt: new Date(),
+      })
+      .where(eq(promptQuotaLog.id, existing.id));
+  }
+
+  async ensurePromptUsageRecord(ipAddress: string, userId?: string): Promise<void> {
+    if (!ipAddress || ipAddress === "unknown") {
+      return;
+    }
+
+    // First try to find by userId if provided
+    if (userId) {
+      const [existingByUser] = await db
+        .select()
+        .from(promptQuotaLog)
+        .where(eq(promptQuotaLog.userId, userId))
+        .limit(1);
+
+      if (existingByUser) {
+        // Update IP if different and update lastUsedAt
+        if (existingByUser.ipAddress !== ipAddress) {
+          await db
+            .update(promptQuotaLog)
+            .set({ ipAddress, lastUsedAt: new Date() })
+            .where(eq(promptQuotaLog.id, existingByUser.id));
+        } else {
+          await db
+            .update(promptQuotaLog)
+            .set({ lastUsedAt: new Date() })
+            .where(eq(promptQuotaLog.id, existingByUser.id));
+        }
+        return;
+      }
+    }
+
+    // Then check by IP
+    const [existingByIp] = await db
+      .select()
+      .from(promptQuotaLog)
+      .where(eq(promptQuotaLog.ipAddress, ipAddress))
+      .limit(1);
+
+    if (!existingByIp) {
+      // Create new record with userId if provided
+      await db.insert(promptQuotaLog).values({
+        ipAddress,
+        userId: userId || null,
+        promptCount: 0, // Logged-in users don't count against quota
+        firstUsedAt: new Date(),
+        lastUsedAt: new Date(),
+      } as any);
+      return;
+    }
+
+    // Update existing record: set userId if provided and not already set
+    if (userId && !existingByIp.userId) {
+      await db
+        .update(promptQuotaLog)
+        .set({ userId, lastUsedAt: new Date() })
+        .where(eq(promptQuotaLog.id, existingByIp.id));
+    } else if (userId && existingByIp.userId === userId) {
+      // Just update lastUsedAt if userId already matches
+      await db
+        .update(promptQuotaLog)
+        .set({ lastUsedAt: new Date() })
+        .where(eq(promptQuotaLog.id, existingByIp.id));
+    }
   }
 
   async getAllQaKnowledge(): Promise<QaKnowledge[]> {

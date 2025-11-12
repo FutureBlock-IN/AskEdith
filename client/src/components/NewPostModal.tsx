@@ -74,7 +74,7 @@ export default function NewPostModal({ open, onClose, mode = 'post' }: NewPostMo
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
-      
+
       if (data.moderationNote) {
         toast({
           title: "Post Created with Review Notice",
@@ -87,7 +87,7 @@ export default function NewPostModal({ open, onClose, mode = 'post' }: NewPostMo
           description: "Your discussion has been posted successfully.",
         });
       }
-      
+
       handleClose();
     },
     onError: (error: any) => {

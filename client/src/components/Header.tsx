@@ -179,12 +179,12 @@ export default function Header({ onSignupClick }: HeaderProps) {
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem asChild>
+                  {/* <DropdownMenuItem asChild>
                     <Link href="/subscribe">
                       <UserCheck className="w-4 h-4 mr-2" />
                       Upgrade to Premium
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="w-4 h-4 mr-2" />

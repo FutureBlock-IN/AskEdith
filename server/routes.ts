@@ -34,6 +34,8 @@ import { syncUserWithDatabase, updateClerkUserMetadata } from "./services/userSy
 import { UpsertUser, UserRole } from "@shared/schema";
 import { clerkAuthWithSync, optionalAuth, isAdmin } from "./middleware/clerkAuth";
 import { clerkClient } from "@clerk/express";
+import { emailService } from "./services/emailService";
+import { enforcePromptQuota } from "./middleware/enforcePromptQuota"; // QUOTA TABLE
 
 if (!process.env.STRIPE_SECRET_KEY) {
   console.warn(
@@ -430,7 +432,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         authorId: userId,
       });
 
-      // Create post first
+      // Create post
       const post = await storage.createPost(postData);
 
       // Skip moderation temporarily due to OpenAI quota issues
@@ -438,12 +440,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Moderation skipped due to OpenAI quota issues");
 
       await storage.checkAndAwardAchievements(userId);
+
+      // Notify admins about new post
+      try {
+        const admins = await storage.getAdmins();
+        const author = await storage.getUser(userId);
+        const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
+        if (adminEmails.length > 0) {
+          const subject = `New post created: ${post.title}`;
+          const html = `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background-color: #0B666B; color: white; padding: 20px; text-align: center;">
+          <h1 style="margin: 0;">New Post on AskEdith</h1>
+        </div>
+
+        <div style="padding: 30px; background-color: #f5f5f5;">
+          <h2 style="color: #333;">Hi Admin,</h2>
+          <p style="color: #666; line-height: 1.6;">
+            A new post has been created by <strong>${author?.firstName || ''} ${author?.lastName || ''} (${author?.email || 'N/A'})</strong> on AskEdith.
+          </p>
+
+          <div style="background-color: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #0B666B;">
+            <h3 style="color: #333; margin-top: 0;">Post Title:</h3>
+            <p style="color: #666; font-style: italic;">"${post.title}"</p>
+
+            <h3 style="color: #333;">Post Content:</h3>
+            <p style="color: #666;">${post.content}</p>
+
+            <h3 style="color: #333;">Posted At:</h3>
+            <p style="color: #666;">${post.createdAt}</p>
+          </div>
+
+          <p style="color: #666; line-height: 1.6;">
+            You can reply to this post directly by clicking the link below:
+          </p>
+
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="${(process.env.APP_URL || "http://localhost:5000").replace(/\/$/, "")}/post/${post.id}"
+              style="background-color: #0B666B; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold;">
+              Reply to Post
+            </a>
+          </div>
+        </div>  
+      </div>
+          `;
+          await Promise.all(
+            adminEmails.map((to: string) =>
+              emailService.sendEmail({ to, subject, html })
+            )
+          );
+        }
+      } catch (notifyErr) {
+        console.warn("Failed to send admin new-post notification:", notifyErr);
+      }
+
       res.json(post);
     } catch (error) {
       console.error("Error creating post:", error);
       res.status(400).json({ message: "Failed to create post" });
     }
   });
+
+  // (share token endpoints removed to avoid referencing non-existent DB column)
 
   // Comments (public for viewing, auth required for creating)
   app.get("/api/posts/:id/comments", async (req, res) => {
@@ -4678,7 +4736,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // RAG-powered Q&A Search
-  app.post("/api/rag-search", async (req: any, res) => {
+  app.post("/api/rag-search", optionalAuth, enforcePromptQuota, async (req: any, res) => {
     try {
       const { query } = req.body;
 
@@ -4816,7 +4874,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // RAG-powered Q&A Search with Streaming
-  app.post("/api/rag-search-stream", async (req: any, res) => {
+  app.post("/api/rag-search-stream", optionalAuth, enforcePromptQuota, async (req: any, res) => { 
     try {
       const { query } = req.body;
 
@@ -5200,6 +5258,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
+      // Notify admins about professional signup
+      try {
+        if (isHealthcareProfessional) {
+          const admins = await storage.getAdmins();
+          const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
+          if (adminEmails.length > 0) {
+            const subject = "New professional signup";
+            const html = `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+             
+              <div style="background-color: #0B666B; color: white; padding: 20px; text-align: center;">
+                <h1 style="margin: 0;">New Professional Signup on AskEdith</h1>
+              </div>
+
+             
+              <div style="padding: 30px; background-color: #f5f5f5;">
+                <h2 style="color: #333;">Hi Admin,</h2>
+                <p style="color: #555; line-height: 1.6;">
+                  A new professional has just signed up on <strong>AskEdith</strong>.
+                </p>
+
+                 
+                <div
+                  style="background-color: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #0B666B;"
+                >
+                  <h3 style="color: #333; margin-top: 0;">👤 Professional Details</h3>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Full Name:</strong>
+                    ${(firstName || '') + ' ' + (lastName || '')}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Community:</strong>
+                    ${userData.communityName || 'N/A'}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Profession:</strong>
+                    ${profession || 'N/A'}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>createdAt:</strong>
+                    ${userData.createdAt || 'N/A'} 
+                  </p>
+
+                  
+                </div>              
+               
+              </div>
+
+             
+              <div
+                style="background-color: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;"
+              >
+                <p style="margin: 0;">© 2025 AskEdith. All rights reserved.</p>
+              </div>
+            </div>
+            `;
+            await Promise.all(
+              adminEmails.map((to: string) =>
+                emailService.sendEmail({ to, subject, html })
+              )
+            );
+          }
+        }
+      } catch (notifyErr) {
+        console.warn("Failed to send admin professional-signup notification:", notifyErr);
+      }
+
       res.json({ 
         success: true, 
         user: {
@@ -5272,6 +5401,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         timezone, 
         introduction,
         isProfessional,
+        isHealthcareProfessional,
         company,
         companyWebsite,
         companyPhone,
@@ -5347,12 +5477,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clerkUser = await clerkClient.users.getUser(userId);
       const clerkEmail = clerkUser.emailAddresses?.[0]?.emailAddress || existingUser?.email || "";
 
+      // Normalize professional flag from different client payloads
+      const professionalFlag = (typeof isProfessional !== 'undefined' ? isProfessional : isHealthcareProfessional) === true;
+
       // Set role and profile type based on professional status, preserving admin roles
       const userRole: UserRole = existingUser?.role === 'admin' 
         ? 'admin' 
-        : (isProfessional === true 
+        : (professionalFlag === true 
           ? 'expert' 
-          : (isProfessional === false 
+          : (professionalFlag === false 
             ? 'user' 
             : (existingUser?.role ?? 'user')));
       
@@ -5360,7 +5493,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? 'tree' 
         : userRole === 'admin' 
           ? (existingUser?.defaultProfileType ?? 'daisy') 
-          : (isProfessional === false 
+          : (professionalFlag === false 
             ? 'daisy' 
             : (existingUser?.defaultProfileType ?? 'daisy'));
 
@@ -5403,7 +5536,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle expert verification for professional users
       let expertVerification = null;
-      if (isProfessional) {
+      if (professionalFlag) {
         try {
           // Check if expert verification already exists
           expertVerification = await storage.getExpertVerification(userId);
@@ -5468,6 +5601,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
+      // Notify admins when user is an expert (professional signup)
+      try {
+        if (userRole === 'expert') {
+          const admins = await storage.getAdmins();
+          const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
+          if (adminEmails.length > 0) {
+            const subject = "New professional signup";
+            const html = `
+               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+             
+              <div style="background-color: #0B666B; color: white; padding: 20px; text-align: center;">
+                <h1 style="margin: 0;">New Professional Signup on AskEdith</h1>
+              </div>
+
+             
+              <div style="padding: 30px; background-color: #f5f5f5;">
+                <h2 style="color: #333;">Hi Admin,</h2>
+                <p style="color: #555; line-height: 1.6;">
+                  A new professional has just signed up on <strong>AskEdith</strong>.
+                </p>
+
+                 
+                <div
+                  style="background-color: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #0B666B;"
+                >
+                  <h3 style="color: #333; margin-top: 0;">👤 Professional Details</h3>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Full Name:</strong>
+                    ${(firstName || '') + ' ' + (lastName || '')}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>communityName:</strong>
+                    ${communityName || 'N/A'}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Profession:</strong>
+                    ${profession || 'N/A'}
+                  </p>
+
+                  <p style="color: #666; margin: 8px 0;">
+                    <strong>Created:</strong>
+                    ${userData.timezone || 'N/A'} 
+                  </p>
+
+                  
+                </div>              
+               
+              </div>
+
+             
+              <div
+                style="background-color: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;"
+              >
+                <p style="margin: 0;">© 2025 AskEdith. All rights reserved.</p>
+              </div>
+            </div>
+
+            `;
+            await Promise.all(
+              adminEmails.map((to: string) =>
+                emailService.sendEmail({ to, subject, html })
+              )
+            );
+          }
+        }
+      } catch (notifyErr) {
+        console.warn("Failed to send admin professional-signup notification:", notifyErr);
+      }
+
       const userWithVerification = {
         ...updatedUser,
         expertVerification

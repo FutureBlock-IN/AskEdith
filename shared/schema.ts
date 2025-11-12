@@ -396,6 +396,25 @@ export const insertQaEmbeddingsSchema = createInsertSchema(qaEmbeddings).omit({
   createdAt: true,
 });
 
+// Prompt quota log (tracks guest/user prompt usage)
+export const promptQuotaLog = pgTable("prompt_quota_log", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  ipAddress: varchar("ip_address", { length: 100 }).notNull(),
+  promptCount: integer("prompt_count").notNull().default(0),
+  firstUsedAt: timestamp("first_used_at").defaultNow(),
+  lastUsedAt: timestamp("last_used_at").defaultNow(),
+}, (table) => [
+  index("idx_prompt_quota_user").on(table.userId),
+  index("idx_prompt_quota_ip").on(table.ipAddress),
+]);
+
+export const insertPromptQuotaLogSchema = createInsertSchema(promptQuotaLog).omit({
+  id: true,
+  firstUsedAt: true,
+  lastUsedAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 // User role types

@@ -9,6 +9,9 @@ import path from 'path';
 
 const app = express();
 
+// If behind a proxy or CDN, trust X-Forwarded-* headers for correct IPs
+// app.set('trust proxy', true); QUOTA CODE
+
 // Add Clerk authentication middleware first
 app.use(clerkAuth);
 
