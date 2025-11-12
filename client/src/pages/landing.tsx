@@ -425,7 +425,7 @@ export default function Landing() {
         setSearchResult({
           question: searchQuery,
           paragraphs: [
-            "I'm having trouble searching right now. Please try again later or contact our support team.",
+            "You’ve reached your free prompt limit. Please sign in to continue your conversation and unlock unlimited access.",
           ],
         });
         setSearchQuery(""); // Clear search query after error
@@ -455,7 +455,7 @@ export default function Landing() {
               <div style={{ marginBottom: "2rem" }}>
                 {/* Cache bust: Updated Jan 29 2025 */}
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight text-center">
-                  Journey Together.
+                  Journey Together...
                 </h1>
 
                 <p className="text-lg sm:text-xl text-white/90 leading-relaxed text-center">

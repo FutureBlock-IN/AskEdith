@@ -470,17 +470,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             <h3 style="color: #333;">Posted At:</h3>
             <p style="color: #666;">${post.createdAt}</p>
           </div>
-
-          <p style="color: #666; line-height: 1.6;">
-            You can reply to this post directly by clicking the link below:
-          </p>
-
-          <div style="text-align: center; margin-top: 20px;">
-            <a href="${(process.env.APP_URL || "http://localhost:5000").replace(/\/$/, "")}/post/${post.id}"
-              style="background-color: #0B666B; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold;">
-              Reply to Post
-            </a>
-          </div>
+            
         </div>  
       </div>
           `;
