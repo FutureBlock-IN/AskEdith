@@ -433,7 +433,12 @@ export default function DynamicDiscussionTopicsSidebar({
                   <div key={forum.forumName}>
                     <div>
                       <button
-                        onClick={() => toggleForum(forum.forumName)}
+                        onClick={() => {
+                          toggleForum(forum.forumName);
+                          if (onCategoryClick) {
+                            onCategoryClick(forum.id, forum.forumName);
+                          }
+                        }}
                         className={`w-full flex items-center justify-between px-3 transition-colors duration-150 group ${isFirst401K ? "pt-4 pb-2.5" : "py-2.5"}`}
                         onMouseEnter={(e) =>
                           (e.currentTarget.style.backgroundColor = "#fffef8")
@@ -644,7 +649,12 @@ export default function DynamicDiscussionTopicsSidebar({
             {caregivingForums.map((forum, forumIndex) => (
               <div key={forum.forumName}>
                 <button
-                  onClick={() => toggleForum(forum.forumName)}
+                  onClick={() => {
+                    toggleForum(forum.forumName);
+                    if (onCategoryClick) {
+                      onCategoryClick(forum.id, forum.forumName);
+                    }
+                  }}
                   className="w-full flex items-center justify-between py-2.5 px-3 transition-colors duration-150 group"
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.backgroundColor = "#fffef8")

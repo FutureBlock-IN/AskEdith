@@ -15,6 +15,7 @@ interface EmailOptions {
   subject: string;
   html: string;
   text?: string;
+  // disableClickTracking?: boolean; Email links Reply to Post
 }
 
 export const emailService = {
@@ -36,6 +37,15 @@ export const emailService = {
         text: options.text || options.html.replace(/<[^>]*>/g, ""),
         html: options.html,
       };
+      // const msg: any = {
+      // Disable click tracking if requested (to prevent SendGrid from wrapping links)
+      // if (options.disableClickTracking) {
+      //   msg.trackingSettings = {
+      //     clickTracking: {
+      //       enable: false,
+      //     },
+      //   };
+      // }
 
       await sgMail.send(msg);
       console.log(`Email sent successfully to ${options.to}`);

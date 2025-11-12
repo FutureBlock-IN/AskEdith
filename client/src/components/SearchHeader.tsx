@@ -109,7 +109,7 @@ export default function SearchHeader({
                 <div className="relative w-full mb-5">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <textarea
-                  placeholder={displayedText + (isTyping ? "|" : "")}
+                  placeholder="Search your community..."
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onKeyDown={(e) => {
@@ -162,19 +162,19 @@ export default function SearchHeader({
                   {/* Action Buttons - now inline with sort options */}
                   {showActionButtons && (
                     <div className="flex space-x-3">
-                      <Button
+                      {/* <Button
                         className="bg-white text-teal-700 hover:bg-teal-50 border border-white shadow-sm"
                         onClick={() => setShowNewPostModal(true)}
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         New Post
-                      </Button>
+                      </Button> */}
                       <Button
                         className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm"
                         onClick={() => setShowNewTopicModal(true)}
                       >
                         <Plus className="w-4 h-4 mr-2" />
-                        New Topic
+                        New Post
                       </Button>
                     </div>
                   )}

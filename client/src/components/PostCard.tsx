@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageSquare, Heart, Clock, CheckCircle, ChevronDown, ChevronRight, Reply, Calendar, ExternalLink, Star } from "lucide-react";
+import { MessageSquare, Heart, Clock, CheckCircle, ChevronDown, ChevronRight, Reply, Calendar, ExternalLink, Star, Share2 } from "lucide-react";
 import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -345,6 +345,33 @@ export default function PostCard({ post }: PostCardProps) {
             />
             {post.commentCount}
           </span>
+          {/* SharePostLinkCode */}
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              try {
+                const appUrl = (import.meta.env.VITE_APP_URL || window.location.origin).replace(/\/$/, "");
+                const shareUrl = `${appUrl}/post/${post.id}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  await navigator.clipboard.writeText(shareUrl);
+                  toast({ title: "Link copied!", description: "" });
+                } else {
+                  // Fallback for insecure contexts
+                  // eslint-disable-next-line no-alert
+                  window.prompt("Copy this link:", shareUrl);
+                  toast({ title: "Link copied!", description: "" });
+                }
+              } catch (err) {
+                console.error("Failed to copy share link:", err);
+                toast({ title: "Error", description: "Failed to copy link.", variant: "destructive" });
+              }
+            }}
+            className="flex items-center hover:text-gray-700 transition-colors"
+            title="Copy post link"
+          >
+            <Share2 className="w-4 h-4 mr-1" />
+          </button>
           <button
             onClick={(e) => {
               e.preventDefault();

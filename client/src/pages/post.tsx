@@ -206,9 +206,29 @@ export default function Post() {
                   {post.commentCount} replies
                 </Button>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    const appUrl = (process.env.REACT_APP_APP_URL || window.location.origin).replace(/\/$/, "");
+                    const shareUrl = `${appUrl}/post/${post.id}`;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                      await navigator.clipboard.writeText(shareUrl);
+                      toast({ title: "Share link copied", description: "Link copied to clipboard." });
+                    } else {
+                      // Fallback: open native prompt so user can copy
+                      // eslint-disable-next-line no-alert
+                      window.prompt("Copy this link:", shareUrl);
+                    }
+                  } catch (err) {
+                    console.error("Failed to copy share link:", err);
+                    toast({ title: "Error", description: "Failed to copy share link.", variant: "destructive" });
+                  }
+                }}
+              >
                 <Share2 className="w-4 h-4 mr-2" />
-                Share
+                Copy share link
               </Button>
             </div>
           </CardContent>

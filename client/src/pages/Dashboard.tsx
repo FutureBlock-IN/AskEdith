@@ -293,30 +293,30 @@ export default function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Link href="/ask-question">
+                <Link href="/landing">
                   <Button className="w-full bg-teal-25 hover:bg-teal-50 text-gray-700 border-teal-100" variant="outline" style={{ backgroundColor: '#f0fdfa' }}>
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Ask a Question
                   </Button>
                 </Link>
-                <Link href="/expert-directory">
+                <Link href="/experts">
                   <Button className="w-full bg-cyan-25 hover:bg-cyan-50 text-gray-700 border-cyan-100" variant="outline" style={{ backgroundColor: '#ecfeff' }}>
                     <Users className="w-4 h-4 mr-2" />
                     Find Experts
                   </Button>
                 </Link>
-                <Link href="/my-bookings">
+                {/* <Link href="/my-bookings">
                   <Button className="w-full bg-teal-50 hover:bg-teal-100 text-gray-700 border-teal-100" variant="outline">
                     <Calendar className="w-4 h-4 mr-2" />
                     My Bookings
                   </Button>
-                </Link>
-                <Link href="/bookmarks">
+                </Link> */}
+                {/* <Link href="/bookmarks">
                   <Button className="w-full bg-teal-25 hover:bg-teal-50 text-gray-700 border-teal-100" variant="outline" style={{ backgroundColor: '#f0fdfa' }}>
                     <Bookmark className="w-4 h-4 mr-2" />
                     My Bookmarks ({additionalStats.bookmarkedPosts})
                   </Button>
-                </Link>
+                </Link> */}
                 {user?.expertVerification?.verificationStatus === 'verified' && (
                   <>
                     <div className="pt-2 mt-2 border-t border-gray-200">
@@ -334,7 +334,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Local Resources */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-700">
                   <MapPin className="w-5 h-5 text-askEdithTeal" />
@@ -358,10 +358,10 @@ export default function Dashboard() {
                   View All Resources
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Emergency Contacts */}
-            <Card>
+         {/*    <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-700">
                   <Shield className="w-5 h-5 text-askEdithTeal" />
@@ -388,10 +388,10 @@ export default function Dashboard() {
                   Save Contacts
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Caregiver Burnout Warning */}
-            <Card className="border-l-4 border-l-orange-400">
+            {/* <Card className="border-l-4 border-l-orange-400">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-orange-700">
                   <AlertCircle className="w-5 h-5" />
@@ -416,10 +416,12 @@ export default function Dashboard() {
                   Take Burnout Assessment
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>
     </MainLayout>
   );
 }
+
+  

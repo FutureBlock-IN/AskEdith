@@ -1,0 +1,2 @@
+-- Migration removed: share_token column and related index were reverted from code.
+-- This file intentionally left as a record. Do NOT apply.
