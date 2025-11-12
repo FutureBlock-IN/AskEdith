@@ -119,15 +119,27 @@ process.on('unhandledRejection', (reason, promise) => {
     // ALWAYS serve the app on port 5000
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
-    const port = 5000;
-    const host = "0.0.0.0";
+    // LocalPortal testing can use other ports as needed.
+    // const port = 5000;
+    // const host = "0.0.0.0";
 
     // Use standard Express app.listen() method instead of server.listen()
-    app.listen(port, host, () => {
-      log(`serving on ${host}:${port}`);
-      console.log(`✓ Server successfully started on port ${port}`);
-    });
+    // LocalPortal testing can use other ports as needed.
+    // app.listen(port, host, () => {
+    //   log(`serving on ${host}:${port}`);
+    //   console.log(`✓ Server successfully started on port ${port}`);
+    // });
 
+
+   // ✅ Use Render's dynamic PORT if available
+    const port = process.env.PORT ? Number(process.env.PORT) : 5000;
+    const host = "0.0.0.0";
+
+    app.listen(port, host, () => {
+      log(`🚀 Server running on ${host}:${port}`);
+      console.log(`🚀 Server ready at http://${host}:${port}`);
+    });
+  
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
