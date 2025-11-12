@@ -3,14 +3,10 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { clerkAuth } from "./middleware/clerkAuth";
-import { seedDatabase } from "./seed";
 import fs from 'fs';
 import path from 'path';
 
 const app = express();
-
-// If behind a proxy or CDN, trust X-Forwarded-* headers for correct IPs
-// app.set('trust proxy', true); QUOTA CODE
 
 // Add Clerk authentication middleware first
 app.use(clerkAuth);
@@ -65,21 +61,6 @@ process.on('unhandledRejection', (reason, promise) => {
 
 (async () => {
   try {
-    // Seed database on startup only if database is empty (first time only)
-    try {
-      const { storage } = await import("./storage");
-      const existingCategories = await storage.getCategories();
-      if (existingCategories.length === 0) {
-        console.log("Database is empty, seeding initial data...");
-        await seedDatabase();
-        console.log("✓ Database seeding completed");
-      } else {
-        console.log(`✓ Database already has ${existingCategories.length} categories, skipping seed`);
-      }
-    } catch (error) {
-      console.error("⚠️  Database seeding check error (continuing anyway):", error);
-    }
-
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -100,46 +81,25 @@ process.on('unhandledRejection', (reason, promise) => {
     const hasBuiltFiles = fs.existsSync(path.join(distPublicDir, 'index.html'));
     
     // Force production mode if built files exist, even if NODE_ENV isn't set
-    // if (!isProduction && !hasBuiltFiles) {
-    //   await setupVite(app, server);
-    // } else {
-    //   console.log(`Serving static files in ${isProduction ? 'production' : 'built'} mode`);
-    //   serveStatic(app);
-    // }
-         // FB Setup 
-        if (isProduction) {
-      console.log("Serving static files in production mode");
-      serveStatic(app);
-    } else {
-      console.log("Running Vite in development mode");
+    if (!isProduction && !hasBuiltFiles) {
       await setupVite(app, server);
+    } else {
+      console.log(`Serving static files in ${isProduction ? 'production' : 'built'} mode`);
+      serveStatic(app);
     }
-
 
     // ALWAYS serve the app on port 5000
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
-    // LocalPortal testing can use other ports as needed.
-    // const port = 5000;
-    // const host = "0.0.0.0";
-
-    // Use standard Express app.listen() method instead of server.listen()
-    // LocalPortal testing can use other ports as needed.
-    // app.listen(port, host, () => {
-    //   log(`serving on ${host}:${port}`);
-    //   console.log(`✓ Server successfully started on port ${port}`);
-    // });
-
-
-   // ✅ Use Render's dynamic PORT if available
-    const port = process.env.PORT ? Number(process.env.PORT) : 5000;
+    const port = 5000;
     const host = "0.0.0.0";
 
+    // Use standard Express app.listen() method instead of server.listen()
     app.listen(port, host, () => {
-      log(`🚀 Server running on ${host}:${port}`);
-      console.log(`🚀 Server ready at http://${host}:${port}`);
+      log(`serving on ${host}:${port}`);
+      console.log(`✓ Server successfully started on port ${port}`);
     });
-  
+
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
