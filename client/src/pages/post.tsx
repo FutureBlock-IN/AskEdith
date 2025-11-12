@@ -70,7 +70,7 @@ export default function Post() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
+        {/* <Header /> */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
@@ -135,7 +135,7 @@ export default function Post() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      {/* <Header /> */}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Navigation */}
@@ -206,7 +206,7 @@ export default function Post() {
                   {post.commentCount} replies
                 </Button>
               </div>
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="sm"
                 onClick={async () => {
@@ -229,7 +229,7 @@ export default function Post() {
               >
                 <Share2 className="w-4 h-4 mr-2" />
                 Copy share link
-              </Button>
+              </Button> */}
             </div>
           </CardContent>
         </Card>
