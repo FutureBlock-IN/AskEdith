@@ -447,7 +447,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const author = await storage.getUser(userId);
         const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
         if (adminEmails.length > 0) {
-          const subject = `New post created: ${post.title}`;
+          const subject = `New post created (${process.env.ENV_TYPE}): ${post.title}`;
           const html = `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #0B666B; color: white; padding: 20px; text-align: center;">
