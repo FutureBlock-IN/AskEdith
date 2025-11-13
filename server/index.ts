@@ -109,8 +109,8 @@ process.on('unhandledRejection', (reason, promise) => {
     const port = 5000;
     const host = "0.0.0.0";
 
-    // Use standard Express app.listen() method instead of server.listen()
-    app.listen(port, host, () => {
+    // Use the server object returned from registerRoutes to keep process alive
+    server.listen(port, host, () => {
       log(`serving on ${host}:${port}`);
       console.log(`✓ Server successfully started on port ${port}`);
     });
