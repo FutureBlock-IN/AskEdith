@@ -455,7 +455,7 @@ export default function Landing() {
               <div style={{ marginBottom: "2rem" }}>
                 {/* Cache bust: Updated Jan 29 2025 */}
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight text-center">
-                  Journey Together...
+                  Journey Together.
                 </h1>
 
                 <p className="text-lg sm:text-xl text-white/90 leading-relaxed text-center">
@@ -649,7 +649,7 @@ export default function Landing() {
                 Always Here
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Community support around the clock when you need it most
+                Community support around the clock when you need it most.
               </p>
             </div>
 
