@@ -3,7 +3,6 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { clerkAuth } from "./middleware/clerkAuth";
-import { seedDatabase } from "./seed";
 import fs from 'fs';
 import path from 'path';
 
@@ -62,21 +61,6 @@ process.on('unhandledRejection', (reason, promise) => {
 
 (async () => {
   try {
-    // Seed database on startup only if database is empty (first time only)
-    try {
-      const { storage } = await import("./storage");
-      const existingCategories = await storage.getCategories();
-      if (existingCategories.length === 0) {
-        console.log("Database is empty, seeding initial data...");
-        await seedDatabase();
-        console.log("✓ Database seeding completed");
-      } else {
-        console.log(`✓ Database already has ${existingCategories.length} categories, skipping seed`);
-      }
-    } catch (error) {
-      console.error("⚠️  Database seeding check error (continuing anyway):", error);
-    }
-
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -92,16 +76,17 @@ process.on('unhandledRejection', (reason, promise) => {
     // doesn't interfere with the other routes
     const isProduction = process.env.NODE_ENV === "production";
     
-    log(`Environment: ${process.env.NODE_ENV || "not set"}, Production mode: ${isProduction}`);
+    // Check if built files exist to force production mode
+    const distPublicDir = path.resolve(import.meta.dirname, '..', 'dist', 'public');
+    const hasBuiltFiles = fs.existsSync(path.join(distPublicDir, 'index.html'));
     
-    if (isProduction) {
-      log("Serving static files in production mode");
-      serveStatic(app);
-    } else {
-      log("Running Vite development server");
+    // Force production mode if built files exist, even if NODE_ENV isn't set
+    if (!isProduction && !hasBuiltFiles) {
       await setupVite(app, server);
+    } else {
+      console.log(`Serving static files in ${isProduction ? 'production' : 'built'} mode`);
+      serveStatic(app);
     }
-
 
     // ALWAYS serve the app on port 5000
     // this serves both the API and the client.
@@ -109,8 +94,8 @@ process.on('unhandledRejection', (reason, promise) => {
     const port = 5000;
     const host = "0.0.0.0";
 
-    // Use the server object returned from registerRoutes to keep process alive
-    server.listen(port, host, () => {
+    // Use standard Express app.listen() method instead of server.listen()
+    app.listen(port, host, () => {
       log(`serving on ${host}:${port}`);
       console.log(`✓ Server successfully started on port ${port}`);
     });
